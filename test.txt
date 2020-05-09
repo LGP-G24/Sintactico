@@ -4,3 +4,7 @@ h:str = ""
 c:int = 0
 s:str = "Hello"
 f:bool = True
+
+# lists
+x:[int] = None
+y:[object] = None
