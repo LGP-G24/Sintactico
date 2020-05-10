@@ -1,4 +1,4 @@
-a:int = 10000
+a:int = 10000 asdasdasd
 b:int = 200
 h:str = ""
 c:int = 0
@@ -6,11 +6,11 @@ s:str = "Hello"
 f:bool = True
 
 # lists
+
 x:[int] = None
 y:[object] = None
 
 #equal
-
 x = [1, 2]
 y = [None]
 x[0] = 3

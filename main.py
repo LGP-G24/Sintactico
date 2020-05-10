@@ -116,20 +116,40 @@ while(tokenIndex < len(tokens)):
   tokenIndex +=1
 '''
 
+#variables space
 tokensInLines = []
 auxList = []
+line = []
+noError = True
+debugLog = True
+currentToken = 0
+
 
 def printWarning(message):
+  if not debugLog: return
   print(colors.WARNING + message + colors.ENDC)
   return
 def printError(message):
+  if not debugLog: return
+  noError = False
   print(colors.FAIL + message + colors.ENDC)
   return
 def printGood(message):
+  if not debugLog: return
   print(colors.OKGREEN + message + colors.ENDC)
   return
+def printDev(message):
+  if not debugLog: return
+  print(colors.HEADER + message + colors.ENDC)
+  return
 
-def checkIdent(line):
+def restartLine():
+  global currentToken
+  global noError
+  currentToken = 0
+  noError = True
+
+def checkIdent():
   if(line[0] == 't'):
     printWarning("Linea Vacia")
     return True
@@ -140,6 +160,63 @@ def checkIdent(line):
         printError('Error de identacion')
     except:
       printError("caracter no esperado")
+
+def goToNextToken():
+  global currentToken
+  currentToken += 1
+  return
+
+def id_path():
+  printDev("id path started")
+  goToNextToken()
+  if len(line) == 1: return
+  elif line[currentToken] == 'tk_dos_puntos':
+    printDev('definicion de variable')
+    var_def()
+  elif line[currentToken] == 'tk_igual':
+    printDev('igualacion de variable')
+  elif line[currentToken] == 'tk_llave_izq':
+    printDev('igualacion de variable lista')
+  else:
+    printeError("Error en variable")
+
+def var_def():
+  type_var()
+  goToNextToken()
+  if(line[currentToken] != 'tk_igual'): 
+      printError('Se esperaba tk_igual pero se leyo ' + line[currentToken])
+  literal()
+
+def type_var():
+  goToNextToken()
+  if(line[currentToken] == 'tk_llave_izq'):
+    list_declaration()
+  else:
+    chocoType()
+  return
+
+def list_declaration():
+  printDev('definicion de variable lista')
+  goToNextToken()
+  chocoType()
+  goToNextToken()
+  if(line[currentToken] != 'tk_llave_der'):
+    printError('Se esperaba tk_llave_der pero se leyo ' + line[currentToken])
+  return
+
+def chocoType():
+  types = ['int','str','object','bool','id']#hay que tener en cuenta la lista
+  if(line[currentToken] not in types):
+    printError('Se esperaba'+ str(types) +' pero se obtuvo ' + line[currentToken])
+  return
+
+def literal():
+  goToNextToken()
+  types = ['tk_entero','True','False','None','tk_cadena','id']
+  if(line[currentToken] not in types):
+    printError('Se esperaba ' + str(types) + ' pero se obtuvo' + line[currentToken])
+  return
+
 
 # vamos a generar una lista con todos los tokens en una
 #linea, para poder hacer el analisis de cada uno
@@ -155,9 +232,14 @@ for token in tokens:
 
 #aqui vamos a hacer el analisis de cada una de las lineas 
 #recordar que tokensInLines[n][0] es un numero o una t
-for line in tokensInLines:
-  #primero miramos la identacion
+for currentLine in tokensInLines:
+  line = currentLine
+  restartLine() #reiniciamos las variables de utilidad
   print(line)
-  if checkIdent(line): continue
-  printGood('Linea correcta')
+  #primero miramos la identacion 
+  if checkIdent(): continue
+  goToNextToken() #una vez valida la identacion procedemos al siguiente token
+  #Ahora vamos a ver por donde cogemos
+  if line[currentToken] == 'id': id_path()
+  if noError: printGood('Linea correcta')
   
