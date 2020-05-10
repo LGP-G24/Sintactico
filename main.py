@@ -131,6 +131,7 @@ def printWarning(message):
   return
 def printError(message):
   if not debugLog: return
+  global noError
   noError = False
   print(colors.FAIL + message + colors.ENDC)
   return
@@ -164,7 +165,6 @@ def checkIdent():
 
 #revisar que no exista nada despues de un camino exitoso 
 def checkEnd():
-  
   if(currentToken != len(line)-2):
         printError("Error sintactico")
 

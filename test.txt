@@ -1,4 +1,4 @@
-a:int = 10000
+a+:int = 10000
 b:int = 200
 h:str = ""
 c:int = 0
