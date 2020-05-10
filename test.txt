@@ -8,3 +8,12 @@ f:bool = True
 # lists
 x:[int] = None
 y:[object] = None
+
+#equal
+
+x = [1, 2]
+y = [None]
+x[0] = 3
+x[1] = y[0] = 4
+f = False
+f
