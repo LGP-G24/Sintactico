@@ -54,7 +54,9 @@ def Row(row,line): #funcion para recorrer la linea, formar el lexema e imprimir 
             if state == 7:
                 cont = 1
             maxi = max(maxi,state)
-            if state == 8:
+            if state == 8:              
+              print("tk_newline")
+              nombres.append("tk_newline")
               return 0
             if state == 0:
                 print (">>> Error lexico (linea: {}, posicion: {})".format(row,t.column))

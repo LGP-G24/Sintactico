@@ -161,6 +161,13 @@ def checkIdent():
     except:
       printError("caracter no esperado")
 
+
+#revisar que no exista nada despues de un camino exitoso 
+def checkEnd():
+  
+  if(currentToken != len(line)-2):
+        printError("Error sintactico")
+
 def goToNextToken():
   global currentToken
   currentToken += 1
@@ -169,16 +176,17 @@ def goToNextToken():
 def id_path():
   printDev("id path started")
   goToNextToken()
-  if len(line) == 1: return
+  if len(line) == 3: return
   elif line[currentToken] == 'tk_dos_puntos':
     printDev('definicion de variable')
-    var_def()
+    var_def()   
+    checkEnd()
   elif line[currentToken] == 'tk_igual':
     printDev('igualacion de variable')
   elif line[currentToken] == 'tk_llave_izq':
     printDev('igualacion de variable lista')
   else:
-    printeError("Error en variable")
+    printError("Error sintactico")
 
 def var_def():
   type_var()
